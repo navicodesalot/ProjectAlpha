@@ -1,0 +1,11 @@
+/*
+int ID
+string Name
+string Description
+Quest QuestAvailableHere
+Monster MonsterLivingHere
+Location LocationToNorth
+Location LocationToEast
+Location LocationToSouth
+Location LocationToWest
+*/
