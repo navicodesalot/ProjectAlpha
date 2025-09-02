@@ -1,0 +1,5 @@
+/*
+int ID
+string Name
+string Description
+*/
