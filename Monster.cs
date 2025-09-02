@@ -1,0 +1,7 @@
+/*
+int ID
+string Name
+int MaximumDamage
+int CurrentHitPoints
+int MaximumHitPoints
+*/
