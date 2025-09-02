@@ -1,0 +1,7 @@
+/*
+string Name
+int CurrentHitPoints
+int MaximumHitPoints
+Weapon CurrentWeapon
+Location CurrentLocation
+*/
