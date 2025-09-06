@@ -4,7 +4,7 @@ public static class Combat
     private static Random random = new Random();
 
     // hoi allemaal, dit is een test
-    // test test
+    // test test test
 
     // generates damage
     public static int DamageGenerator(Weapon weapon)
