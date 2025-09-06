@@ -1,7 +1,20 @@
 public static class Combat
 {
-    public static int DamageGenerator(Weapons)
+    // outside of the rest to prevent duplicating random effect
+    private static Random random = new Random();
+
+    // generates damage
+    public static int DamageGenerator(Weapon weapon)
     {
-        Random randomDamage = new Random();
+
+        int damage = random.Next(weapon.MinimumDamage, weapon.MaximumDamage + 1);
+        return damage;
+
     }
+
+    public static void Main()
+    {
+        // hi
+    }
+
 }

@@ -2,15 +2,15 @@
 int ID
 string Name
 int MaximumDamage
+int MinimumDamage
 */
 
-public static class Weapon
+public class Weapon
 {
     public int ID;
     public string Name;
-    public int maxDamage;
-
-    public int minDamage;
+    public int MaximumDamage;
+    public int MinimumDamage;
 
     public Weapon(int id, string name, int minDamage, int maxDamage)
     {
@@ -20,4 +20,6 @@ public static class Weapon
         MaximumDamage = maxDamage;
     }
 
+
+    
 }
