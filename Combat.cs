@@ -34,8 +34,6 @@ public static class Combat
 
             Console.ReadLine();
 
-            // test test
-
             
 
 
