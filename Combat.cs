@@ -3,6 +3,9 @@ public static class Combat
     // outside of the rest to prevent duplicating random effect
     private static Random random = new Random();
 
+    // hoi allemaal, dit is een test
+    // test test
+
     // generates damage
     public static int DamageGenerator(Weapon weapon)
     {
