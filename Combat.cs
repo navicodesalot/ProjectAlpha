@@ -29,12 +29,10 @@ public static class Combat
             Console.WriteLine(@$"
     {player.Name} HP: {player.CurrentHitPoints}
     {monster.Name} HP: {monster.CurrentHitPoints}
-    THIS WILL HURT. OW!
+    THIS WILL HURT. OW! Oww
         ");
 
             Console.ReadLine();
-
-            // test test testy
 
             
 
