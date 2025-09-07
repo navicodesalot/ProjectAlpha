@@ -1,5 +1,0 @@
-C:\Users\jesan\Documents\GitHub\ProjectAlpha\obj\Debug\net8.0\ProjectAlpha.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\jesan\Documents\GitHub\ProjectAlpha\obj\Debug\net8.0\ProjectAlpha.AssemblyInfoInputs.cache
-C:\Users\jesan\Documents\GitHub\ProjectAlpha\obj\Debug\net8.0\ProjectAlpha.AssemblyInfo.cs
-C:\Users\jesan\Documents\GitHub\ProjectAlpha\obj\Debug\net8.0\ProjectAlpha.csproj.CoreCompileInputs.cache
-C:\Users\jesan\Documents\GitHub\ProjectAlpha\obj\Debug\net8.0\ProjectAlpha.sourcelink.json
