@@ -11,15 +11,6 @@ public class Player
     public string Name;
     public int CurrentHitPoints;
     public int MaximumHitPoints;
-    Weapon CurrentWeapon;
-
-    public Player(string name, int maxHp, int currentHp, Weapon weapon)
-{
-    Name = name;
-    MaximumHitPoints = maxHp;
-    CurrentHitPoints = currentHp;
-    CurrentWeapon = weapon;
-}
-
-
+    public Weapon CurrentWeapon;
+    Location CurrentLocation;
 }
