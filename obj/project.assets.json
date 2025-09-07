@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\jesan\\.nuget\\packages\\": {}
+    "C:\\Users\\jody_\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jesan\\Documents\\GitHub\\ProjectAlpha\\ProjectAlpha.csproj",
+      "projectUniqueName": "C:\\Users\\jody_\\OneDrive\\Documents\\GitHub\\ProjectAlpha\\ProjectAlpha.csproj",
       "projectName": "ProjectAlpha",
-      "projectPath": "C:\\Users\\jesan\\Documents\\GitHub\\ProjectAlpha\\ProjectAlpha.csproj",
-      "packagesPath": "C:\\Users\\jesan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jesan\\Documents\\GitHub\\ProjectAlpha\\obj\\",
+      "projectPath": "C:\\Users\\jody_\\OneDrive\\Documents\\GitHub\\ProjectAlpha\\ProjectAlpha.csproj",
+      "packagesPath": "C:\\Users\\jody_\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\jody_\\OneDrive\\Documents\\GitHub\\ProjectAlpha\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\jesan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\jody_\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -64,7 +64,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.405/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
