@@ -3,18 +3,25 @@ public static class Combat
     // outside of the rest to prevent duplicating random effect
     private static Random random = new Random();
 
-    // generates damage
-    public static int DamageGenerator(Weapon weapon)
+    // generates player damage
+    public static int weaponDamageGenerator(Weapon weapon)
     {
 
         int damage = random.Next(weapon.MinimumDamage, weapon.MaximumDamage + 1);
         return damage;
     }
 
+    // generates monster damage
+    public static int monsterDamageGenerator(Monster monster)
+    {
+        int damage = random.Next(monster.MinimumDamage, monster.MaximumDamage + 1);
+        return damage;
+    }
+
     // monster's swing
     public static int MonsterTurn(Player player, Monster monster)
     {
-        int damage = monster.MaximumDamage;
+        int damage = monsterDamageGenerator(monster);
         player.CurrentHitPoints -= damage;
         return damage;
     }
@@ -22,7 +29,7 @@ public static class Combat
     // player's swing
     public static int PlayerTurn(Monster monster, Weapon weapon)
     {
-        int damage = DamageGenerator(weapon);
+        int damage = weaponDamageGenerator(weapon);
         monster.CurrentHitPoints -= damage;
         return damage;
     }
@@ -61,6 +68,7 @@ public static class Combat
                 if (monster.CurrentHitPoints > 0)
                 {
                     int monstersDamageDone = MonsterTurn(player, monster);
+                    Console.ReadLine();
                     Console.WriteLine($"The {monster.Name} does {monstersDamageDone} damage!");
                 }
             }
@@ -78,11 +86,13 @@ public static class Combat
 
         if (player.CurrentHitPoints <= 0)
         {
+            Console.ReadLine();
             Console.WriteLine("You've been defeated!");
             // once we have a try again menu, it will be referred to here
         }
         else
         {
+            Console.ReadLine();
             Console.WriteLine($"You defeated the {monster.Name}!");
         }
     }
