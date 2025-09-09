@@ -14,8 +14,9 @@ public class Monster
     public int MaximumDamage;
     public int CurrentHitPoints;
     public int MaximumHitPoints;
+    public bool IsAlive;
 
-    public Monster(int id, string name, int minDamage, int maxDamage, int currentHp, int maxHp)
+    public Monster(int id, string name, int minDamage, int maxDamage, int currentHp, int maxHp, bool isAlive)
     {
         ID = id;
         Name = name;
@@ -23,6 +24,7 @@ public class Monster
         MaximumDamage = maxDamage;
         CurrentHitPoints = currentHp;
         MaximumHitPoints = maxHp;
+        IsAlive = isAlive;
     }
 }
 
