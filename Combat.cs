@@ -62,36 +62,39 @@ public static class Combat
             {
                 int damageDone = PlayerTurn(monster, weapon);
                 Console.WriteLine($"You do {damageDone} damage!");
+                Console.ReadKey(true);
 
                 if (monster.CurrentHitPoints > 0)
                 {
                     int monstersDamageDone = MonsterTurn(player, monster);
-                    Console.ReadLine();
                     Console.WriteLine($"The {monster.Name} does {monstersDamageDone} damage!");
+                    Console.ReadKey(true);
                 }
             }
             else if (action == 1)
             {
                 int dodgedDamage = PlayerDodges(player, monster);
                 Console.WriteLine($"You dodge! The {monster.Name} only does {dodgedDamage} damage.");
+                Console.ReadKey(true);
             }
             else
             {
                 Console.WriteLine($"The {monster.Name} eyes you hungrily.");
+                Console.ReadKey(true);
             }
 
         }
 
         if (player.CurrentHitPoints <= 0)
         {
-            Console.ReadLine();
             Console.WriteLine("You've been defeated!");
+            Console.ReadKey(true);
             // once we have a try again menu, it will be referred to here
         }
         else
         {
-            Console.ReadLine();
             Console.WriteLine($"You defeated the {monster.Name}!");
+            Console.ReadKey(true);
             monster.IsAlive = false;
         }
     }
