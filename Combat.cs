@@ -94,6 +94,7 @@ public static class Combat
         {
             Console.ReadLine();
             Console.WriteLine($"You defeated the {monster.Name}!");
+            monster.IsAlive = false;
         }
     }
 
