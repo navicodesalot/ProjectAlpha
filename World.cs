@@ -122,7 +122,7 @@ public static class World
         townSquare.LocationToSouth = home;
         townSquare.LocationToEast = guardPost;
         townSquare.LocationToWest = farmhouse;
-
+        
         farmhouse.LocationToEast = townSquare;
         farmhouse.LocationToWest = farmersField;
 
