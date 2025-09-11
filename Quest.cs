@@ -6,6 +6,7 @@ public class Quest
     public bool IsQuestStarted = false;
     public bool IsQuestCompleted = false;
 
+    public List<string> ListOfCompletedQuest = [];
     private int QuestCompletedCount = 0;
 
     public Quest(int id, string name, string description)
@@ -42,11 +43,20 @@ public class Quest
         if (IsQuestStarted && !IsQuestCompleted)
         {
             IsQuestCompleted = true;
+            ListOfCompletedQuest.Add(Name);
             QuestCompletedCount++;
-            
-            // reward portal stone ?
+
+            // // reward portal stone ?
+            // Random random = new Random();
+            // int randomIndex = random.Next(World.Weapons.Count);
+            // Weapon portal_stone = World.Weapons[randomIndex];
+            // World.Weapons.RemoveAt(randomIndex);
+
+            // // voeg beloning toe aan speler inventory
+            // Program.player.Inventory.AddWeapon(portal_stone);
 
             Console.WriteLine($"Congratulations! You have completed the quest '{Name}'");
+
         }
 
         else if (!IsQuestStarted)
