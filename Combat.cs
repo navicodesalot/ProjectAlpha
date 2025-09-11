@@ -47,54 +47,67 @@ public static class Combat
     {
         while (player.CurrentHitPoints > 0 && monster.CurrentHitPoints > 0)
         {
-            Console.WriteLine(@$"
-{player.Name} HP: {player.CurrentHitPoints}
-{monster.Name} HP: {monster.CurrentHitPoints}
-        ");
-            Console.WriteLine("What will you do?");
+            var actions = new List<string>
+            {
+                "SWING",
+                "DODGE"
+            };
 
-            Console.WriteLine(@"
-> A | SWING
-> B | DODGE
-            ");
+            var menu = new Menu($"{monster.Name}'s health : {monster.CurrentHitPoints} || {player.Name}'s health: {player.CurrentHitPoints}\nWhat will you do?", actions);
 
-            string action = Console.ReadLine()!.ToUpper();
+            int action = menu.Show();
+            Console.Clear();
 
-            if (action == "A")
+            if (action == 0)
             {
                 int damageDone = PlayerTurn(monster, weapon);
                 Console.WriteLine($"You do {damageDone} damage!");
+                Console.ReadKey(true);
 
                 if (monster.CurrentHitPoints > 0)
                 {
                     int monstersDamageDone = MonsterTurn(player, monster);
-                    Console.ReadLine();
                     Console.WriteLine($"The {monster.Name} does {monstersDamageDone} damage!");
+                    Console.ReadKey(true);
                 }
             }
-            else if (action == "B")
+            else if (action == 1)
             {
                 int dodgedDamage = PlayerDodges(player, monster);
                 Console.WriteLine($"You dodge! The {monster.Name} only does {dodgedDamage} damage.");
+                Console.ReadKey(true);
             }
             else
             {
                 Console.WriteLine($"The {monster.Name} eyes you hungrily.");
+                Console.ReadKey(true);
             }
 
         }
 
         if (player.CurrentHitPoints <= 0)
         {
-            Console.ReadLine();
             Console.WriteLine("You've been defeated!");
+            Console.ReadKey(true);
             // once we have a try again menu, it will be referred to here
         }
         else
         {
-            Console.ReadLine();
             Console.WriteLine($"You defeated the {monster.Name}!");
+            Console.ReadKey(true);
+            monster.IsAlive = false;
         }
     }
 
 }
+/* voor het testen van combat
+                    Player player = new Player();
+                    player.Name = "Test Wizard";
+                    player.CurrentHitPoints = 20;
+                    player.MaximumHitPoints = 20;
+                    player.CurrentWeapon = World.Weapons[0]; // Or use World.WeaponByID(World.WEAPON_ID_RUSTY_SWORD);
+
+                    Monster monster = World.Monsters[1]; // Or use World.MonsterByID(World.MONSTER_ID_RAT);
+
+                    Combat.StartCombat(player, monster, player.CurrentWeapon);
+*/
