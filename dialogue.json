@@ -1,0 +1,82 @@
+{
+  "4": {
+    "Start": {
+      "Sentences": [
+        "You step into the Alchemist's Hut.",
+        "The air smells of herbs and strange mixtures.",
+        "[ALCHEMIST]: Hello stranger, you seem pretty capable.",
+        "[ALCHEMIST]: I have a bit of a rat issue, you wouldn't happen to have any traps?",
+        "[ALCHEMIST]: Although, I suppose, that is a bit inhumane...",
+        "[ALCHEMIST]: Could you just kill it humanely for me?",
+        "[ALCHEMIST]: I would greatly appreciate it."
+      ]
+    },
+    "Complete": {
+      "Sentences": [
+        "The Alchemist's face lights up.",
+        "He can no longer sense the rat's presence.",
+        "[ALCHEMIST]: Thank you, stranger!",
+        "[ALCHEMIST]: Now I can finally continue my mystical endeavors",
+        "[ALCHEMIST]: Hm? Payment?",
+        "[ALCHEMIST]: I, uh, shall pay you by spreading the word of your bravery!"
+      ]
+    }
+  },
+  "6": {
+    "Start": {
+      "Sentences": [
+        "You arrive at the Farmhouse.",
+        "The Farmer looks worried.",
+        "[FARMER]: Hey! Aren't you the rat catcher?",
+        "[FARMER]: The Alchemist told me all about you.",
+        "[FARMER]: I could do with some pest control myself.",
+        "[FARMER]: You see, I found a snake in my boot last night!",
+        "[FARMER]: That alone scared the gems out of me, but now it's taken over my crops!",
+        "[FARMER]: If you could take care of it, I would forever be in your debt, friend."
+      ]
+    },
+    "Complete": {
+      "Sentences": [
+        "The Farmer cheers as you walk towards him.",
+        "[FARMER]: You actually did it, you madman!",
+        "[FARMER]: And here I was, worried about how to contact your family post mortem.",
+        "[FARMER]: Oh, a payment?",
+        "[FARMER]: Uh, the Alchemist said you do this stuff for free, no?",
+        "[FARMER]: I don't have my coin pouch with me, so...",
+        "[FARMER]: Can I pay you by spreading the word?",
+        "[FARMER]: I'll make sure to mention you don't do it for free, haha!"
+      ]
+    }
+  },
+  "8": {
+    "Start": {
+      "Sentences": [
+        "You cross the old, stone bridge.",
+        "A Guard stops you.",
+        "[GUARD]: Woah there, traveler, this area is off limits.",
+        "[GUARD]: Wait a minute, aren't you pest control?",
+        "[GUARD]: You wouldn't happen to have any experience with insects, would you?",
+        "[GUARD]: You see, Her Majesty has been fiending for some spider silk.",
+        "[GUARD]: She wishes to have a dress fashioned from it, but uh...",
+        "[GUARD]: I'm afraid of spiders.",
+        "[GUARD]: You could do it though, right?",
+        "[GUARD]: As payment you can keep as much spider silk as you want, as long as there's enough for Her Majesty.",
+        "[GUARD]: The Farmer mentioned you're a bit of a stickler about payment, so...",
+        "[GUARD]: Anyways, good luck, stranger."
+      ]
+    },
+    "Complete": {
+      "Sentences": [
+        "The guard takes the spider silk from you, .",
+        "[GUARD]: You actually did it?",
+        "[GUARD]: That spider was huge!",
+        "[GUARD]: Thank you, pest control.",
+        "[GUARD]: Or should I call you Hero?",
+        "[GUARD]: Go right on ahead, Hero. You did very well.",
+        "[GUARD]: And, y'know what?",
+        "The Guard reaches into his pocket, and hands you a golden coin.",
+        "[GUARD]: For the troubles."
+      ]
+    }
+  }
+}

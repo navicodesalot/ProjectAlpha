@@ -10,13 +10,19 @@ class Program
         // Console.WriteLine("Press any key...");
         // Console.ReadKey(true);
 
+        Player player = null;
+
+
+        DialogueManager manager = new DialogueManager("dialogue.json");
+
         //  de opties van het hoofdmenu
         var options = new List<string>
         {
             "Start Game.",
             "About us.",
             "Exit game.",
-            "Test Inventory."
+            "Test Inventory.",
+            "Test Dialogue."
         };
 
         // geeft title een naam 
@@ -35,13 +41,15 @@ class Program
                 case 0:
                     Console.WriteLine("Welcome Wizard....");
                     Pause();
+
+                    
                     // player maken en op goede plek op de map zetten
-                    Player player = new(World.Locations[0]);
-                    player.CurrentLocation = World.Locations[0];
+                player = new Player(World.Locations[0]);
+                player.CurrentLocation = World.Locations[0];
                     do
                     {
                         //compas met opties printen
-                        Console.WriteLine("\nYou are X: \n"+ player.CurrentLocation.Map(player.CurrentLocation));
+                        Console.WriteLine("\nYou are X: \n" + player.CurrentLocation.Map(player.CurrentLocation));
                         Console.WriteLine(player.CurrentLocation.Compas());
                         do
                         {
@@ -76,6 +84,22 @@ class Program
                     break;
                 case 3: // test inventory
                     TestInventory();
+                    Pause();
+                    break;
+                case 4: // test dialogue
+                    Console.Clear();
+                    Console.WriteLine("Please work.");
+
+                    // if player no exist it still do it fuck you
+                    if (player == null)
+                    {
+                        player = new Player(World.LocationByID(World.LOCATION_ID_ALCHEMIST_HUT));
+                    }
+                    player.CurrentLocation = World.LocationByID(World.LOCATION_ID_ALCHEMIST_HUT);
+
+                    manager.ShowStartDialogue(player.CurrentLocation.ID);
+                    manager.ShowCompleteDialogue(player.CurrentLocation.ID);
+
                     Pause();
                     break;
 
