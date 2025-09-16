@@ -9,7 +9,12 @@ class Program
 {
     static void Main()
     {
+        Console.Clear();
+
+
+        // maakt ff player aan voor case 0
         Player player = null;
+
         DialogueManager manager = new DialogueManager("dialogue.json");
 
         //  de opties van het hoofdmenu
@@ -33,10 +38,15 @@ class Program
             switch (choice)
             {
                 case 0:
-                // welkom de speler
-                    Console.WriteLine("Welcome Wizard....");
-                    player = new Player(World.Locations[0]);
+                    Console.WriteLine("Welcome, hero....");
+                    Console.Write("Enter your name: ");
+                    player = new Player(Console.ReadLine(), 20);
                     player.CurrentLocation = World.Locations[0];
+                    player.CurrentHitPoints = 20;
+                    player.MaximumHitPoints = 20;
+                    player.CurrentWeapon = World.WeaponByID(World.WEAPON_ID_RUSTY_SWORD);
+
+                    // ^^ dit hier zou combat voor nu moeten fixen
 
                     bool keepExploring = true;
                     do
@@ -88,21 +98,44 @@ class Program
                                 newLocation = player.CurrentLocation.LocationToWest;
                                 break;
                             case "Stay here":
-                                if(player.CurrentLocation.QuestAvailableHere != null && 
-                                   !player.CurrentLocation.QuestAvailableHere.IsQuestCompleted)
+                                var quest = player.CurrentLocation.QuestAvailableHere;
+                                var monster = player.CurrentLocation.MonsterLivingHere;
+                                int locId = player.CurrentLocation.ID;
+
+                                if (quest != null)
                                 {
-                                    player.CurrentLocation.QuestAvailableHere.StartQuest(player.CurrentLocation);
-                                    if(player.CurrentLocation.QuestAvailableHere.IsQuestStarted)
+                                    if (!quest.IsQuestCompleted)
                                     {
-                                        Combat.StartCombat(player, player.CurrentLocation.MonsterLivingHere, player.CurrentWeapon);
-                                        player.CurrentLocation.QuestAvailableHere.QuestCompleted();
+                                        // dialogue voordat de quest af is
+                                        manager.ShowStartDialogue(locId);
+
+                                        quest.StartQuest(player.CurrentLocation);
+
+                                        if (quest.IsQuestStarted && monster != null)
+                                        {
+                                            Combat.StartCombat(player, monster, player.CurrentWeapon);
+                                            quest.QuestCompleted();
+
+                                            // toon complete dialoog direct na het voltooien van de quest
+                                            manager.ShowCompleteDialogue(locId);
+                                        }
                                     }
+                                    else
+                                    {
+                                        // quest done dialogue
+                                        manager.ShowCompleteDialogue(locId);
+                                    }
+                                }
+                                else if (monster != null)
+                                {
+                                    // fight monster pls
+                                    Combat.StartCombat(player, monster, player.CurrentWeapon);
                                 }
                                 else
                                 {
                                     Console.WriteLine("Nothing to do here...");
-                                    Pause();
                                 }
+                                Pause();
                                 break;
                             case "Exit to main menu":
                                 keepExploring = false;
