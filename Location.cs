@@ -36,7 +36,7 @@ public class Location
 
     public string Compas()
     {
-        string s = "\nFrom here you can go:\n";
+        string s = "\n\nFrom here you can go:\n";
         if (LocationToNorth != null)
         {
             s += "    N\n    |\n";
@@ -61,46 +61,40 @@ public class Location
         return s;
     }
 
-    public string Map(Location current)
+
+    // supaaa niceee
+    // ik ga m aanpassen zodat "X" de speler current location een andere kleur aangeeft
+    // meer player friendlyyyy
+    // -angel
+    public void ShowMap(Location current)
     {
-        WorldMap = " P\n A\nVTGBS\n H";
-        if (current.Name == "Home")
+        string map = " P\n A\nVTGBS\n H";
+        char symbol = ' ';
+        if (current.Name == "Home") symbol = 'H';
+        else if (current.Name == "Town square") symbol = 'T';
+        else if (current.Name == "Alchemist's hut") symbol = 'A';
+        else if (current.Name == "Alchemist's garden") symbol = 'P';
+        else if (current.Name == "Farmhouse") symbol = 'F';
+        else if (current.Name == "Farmer's field") symbol = 'V';
+        else if (current.Name == "Guard post") symbol = 'G';
+        else if (current.Name == "Bridge") symbol = 'B';
+        else if (current.Name == "Forest") symbol = 'S';
+
+        foreach (char c in map)
         {
-            WorldMap = WorldMap.Replace("H", "X");
+            // huidige locatie
+            if (c == symbol)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("X");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(c);
+            }
         }
-        else if (current.Name == "Town square")
-        {
-            WorldMap = WorldMap.Replace("T", "X");
-        }
-        else if (current.Name == "Alchemist's hut")
-        {
-            WorldMap = WorldMap.Replace("A", "X");
-        }
-        else if (current.Name == "Alchemist's garden")
-        {
-            WorldMap = WorldMap.Replace("P", "X");
-        }
-        else if (current.Name == "Farmhouse")
-        {
-            WorldMap = WorldMap.Replace("F", "X");
-        }
-        else if (current.Name == "Farmer's field")
-        {
-            WorldMap = WorldMap.Replace("V", "X");
-        }
-        else if (current.Name == "Guard post")
-        {
-            WorldMap = WorldMap.Replace("G", "X");
-        }
-        else if (current.Name == "Bridge")
-        {
-            WorldMap = WorldMap.Replace("B", "X");
-        }
-        else if (current.Name == "Forest")
-        {
-            WorldMap = WorldMap.Replace("S", "X");
-        }
-        return WorldMap;
     }
 
     public Location GetLocationAt(string location) => location switch
