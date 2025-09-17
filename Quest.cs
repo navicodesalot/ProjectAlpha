@@ -6,7 +6,6 @@ public class Quest
     public bool IsQuestStarted = false;
     public bool IsQuestCompleted = false;
 
-    public List<string> ListOfCompletedQuest = [];
     private int QuestCompletedCount = 0;
 
     public Quest(int id, string name, string description)
@@ -16,36 +15,56 @@ public class Quest
         Description = description;
     }
 
-    public void StartQuest(Location currentlocation)
+    public void StartQuest(Player player, Location currentlocation)
     {
-        if (currentlocation.ID == World.LOCATION_ID_BRIDGE ||
-        currentlocation.ID == World.LOCATION_ID_FARMHOUSE ||
-        currentlocation.ID == World.LOCATION_ID_ALCHEMIST_HUT
-        )
-
+        if (IsQuestStarted)
         {
-            Console.WriteLine($"You are at a location with a quest: '{Name}'. Do you want to start the quest? (y/n)");
-            string input = Console.ReadLine()!.ToLower();
-
-            if (input == "y")
-            {
-                IsQuestStarted = true;
-                Console.WriteLine($"You have started the quest '{Name}': {Description}");
-            }
-            else if (input == "n")
-            {
-                Console.WriteLine("You have chosen not to start the quest.");
-            }
+            Console.WriteLine($"The quest '{Name} has already been started'");
+            return;
         }
-    }
+        if (currentlocation.ID == World.LOCATION_ID_BRIDGE ||
+            currentlocation.ID == World.LOCATION_ID_FARMHOUSE ||
+            currentlocation.ID == World.LOCATION_ID_ALCHEMIST_HUT
+            )
+
+            do
+            {
+                Console.WriteLine($"You are at a location with a quest: '{Name}'. Do you want to start the quest? (y/n)");
+                string input = Console.ReadLine()!.ToLower();
+
+                if (input == "y")
+                {
+                    IsQuestStarted = true;
+                    Console.WriteLine($"You have started the quest '{Name}': {Description}");
+                    player.ActiveQuests.Add(this);
+                    break;
+                }
+                else if (input == "n")
+                {
+                    Console.WriteLine("You have chosen not to start the quest.");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter 'y' or 'n'.");
+                }
+            } while (true);
+            
+
+        }
+    
     public void QuestCompleted()
     {
         if (IsQuestStarted && !IsQuestCompleted)
         {
             IsQuestCompleted = true;
-            ListOfCompletedQuest.Add(Name);
-            QuestCompletedCount++;
-
+            foreach (var quest in World.Quests)
+            {
+                if (quest.IsQuestCompleted)
+                {
+                    QuestCompletedCount++;
+                }
+            }
             // // reward portal stone ?
             // Random random = new Random();
             // int randomIndex = random.Next(World.Weapons.Count);
@@ -56,6 +75,7 @@ public class Quest
             // Program.player.Inventory.AddWeapon(portal_stone);
 
             Console.WriteLine($"Congratulations! You have completed the quest '{Name}'");
+            Console.WriteLine($"Quest Completed: '{QuestCompletedCount}'");
 
         }
 

@@ -43,7 +43,7 @@ public static class Combat
     }
 
 
-    public static void StartCombat(Player player, Monster monster, Weapon weapon)
+    public static bool StartCombat(Player player, Monster monster, Weapon weapon)
     {
         while (player.CurrentHitPoints > 0 && monster.CurrentHitPoints > 0)
         {
@@ -90,12 +90,14 @@ public static class Combat
             Console.WriteLine("You've been defeated!");
             Console.ReadKey(true);
             // once we have a try again menu, it will be referred to here
+            return false; // player lose
         }
         else
         {
             Console.WriteLine($"You defeated the {monster.Name}!");
             Console.ReadKey(true);
             monster.IsAlive = false;
+            return true; // player won
         }
     }
 

@@ -101,43 +101,50 @@ class Program
                                 var quest = player.CurrentLocation.QuestAvailableHere;
                                 var monster = player.CurrentLocation.MonsterLivingHere;
                                 int locId = player.CurrentLocation.ID;
-
-                                if (quest != null)
+                              
+                                // Quest aanwezig en niet voltooid
+                                if (quest != null && !quest.IsQuestCompleted)
                                 {
-                                    if (!quest.IsQuestCompleted)
-                                    {
-                                        // dialogue voordat de quest af is
-                                        manager.ShowStartDialogue(locId);
-
-                                        quest.StartQuest(player.CurrentLocation);
-
-                                        if (quest.IsQuestStarted && monster != null)
-                                        {
-                                            Combat.StartCombat(player, monster, player.CurrentWeapon);
-                                            quest.QuestCompleted();
-
-                                            // toon complete dialoog direct na het voltooien van de quest
-                                            manager.ShowCompleteDialogue(locId);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        // quest done dialogue
-                                        manager.ShowCompleteDialogue(locId);
-                                    }
+                                    manager.ShowStartDialogue(locId);
+                                    quest.StartQuest(player, player.CurrentLocation);
+                                    
                                 }
-                                else if (monster != null)
+                                // Geen quest, alleen monster
+                                else if (monster != null && monster.IsAlive && (quest == null || quest.IsQuestStarted))
                                 {
-                                    // fight monster pls
-                                    Combat.StartCombat(player, monster, player.CurrentWeapon);
+                                    bool playerWon = Combat.StartCombat(player, monster, player.CurrentWeapon);
+
+                                    if (playerWon)
+                                    {
+                                        if (monster != null)
+                                        {
+                                            foreach (var activeQuest in player.ActiveQuests.ToList())
+                                            {
+                                                if (!activeQuest.IsQuestCompleted)
+                                                {
+                                                    activeQuest.QuestCompleted();
+                                                    manager.ShowCompleteDialogue(locId - 1);
+                                                    
+                                                }
+                                            }
+                                            
+                                            
+                                        }
+                                      
+                                        player.CurrentLocation.MonsterLivingHere = null;
+                                    }
                                 }
                                 else
                                 {
                                     Console.WriteLine("Nothing to do here...");
                                 }
+
                                 Pause();
                                 break;
-                            case "Exit to main menu":
+
+                                
+                                
+                            case "Exit to the main menu":
                                 keepExploring = false;
                                 break;
                         }
@@ -169,7 +176,7 @@ class Program
 
                 case 2:
                     Console.WriteLine("Goodbye!");
-                    Pause();
+                    running = false;
                     break;
                 case 3: // test inventory
                         // TestInventory();]

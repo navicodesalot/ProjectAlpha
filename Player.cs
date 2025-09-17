@@ -17,6 +17,8 @@ public class Player
     public Location CurrentLocation;
     public Player(Location startLocation) => CurrentLocation = startLocation;
 
+     public List<Quest> ActiveQuests { get; private set; } = new List<Quest>();
+
     public bool TryMoveTo(Location newLocation)
     {
         if (newLocation == null) { return false; }
