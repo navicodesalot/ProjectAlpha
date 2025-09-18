@@ -43,8 +43,8 @@
         "[FARMER]: Oh, a payment?",
         "[FARMER]: Uh, the Alchemist said you do this stuff for free, no?",
         "[FARMER]: I don't have my coin pouch with me, so...",
-        "[FARMER]: Can I pay you by spreading the word?",
-        "[FARMER]: I'll make sure to mention you don't do it for free, haha!"
+        "[FARMER]: You can have my grandfather's Club, alright?",
+        "[FARMER]: So please stop glaring at me..."
       ]
     }
   },
@@ -61,8 +61,7 @@
         "[GUARD]: I'm afraid of spiders.",
         "[GUARD]: You could do it though, right?",
         "[GUARD]: As payment you can keep as much spider silk as you want, as long as there's enough for Her Majesty.",
-        "[GUARD]: The Farmer mentioned you're a bit of a stickler about payment, so...",
-        "[GUARD]: Anyways, good luck, stranger."
+        "[GUARD]: The Farmer mentioned you're a bit of a stickler about payment, so..."
       ]
     },
     "Complete": {

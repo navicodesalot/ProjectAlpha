@@ -101,17 +101,33 @@ class Program
                                 var quest = player.CurrentLocation.QuestAvailableHere;
                                 var monster = player.CurrentLocation.MonsterLivingHere;
                                 int locId = player.CurrentLocation.ID;
-                              
+
+                                // guard check
+                                if (player.CurrentLocation.ID == World.LOCATION_ID_GUARD_POST)
+                                {
+                                    bool alchemistDone = World.QuestByID(World.QUEST_ID_CLEAR_ALCHEMIST_GARDEN).IsQuestCompleted;
+                                    bool farmerDone = World.QuestByID(World.QUEST_ID_CLEAR_FARMERS_FIELD).IsQuestCompleted;
+
+                                    // geen guard quest als de andere twee nog niet af zijn
+                                    if (!(alchemistDone && farmerDone))
+                                    {
+                                        Console.WriteLine("The Guard eyes you warily, not fond of strangers.");
+                                        Pause();
+                                        break;
+                                    }
+
+                                }
+
                                 // Quest aanwezig en niet voltooid
                                 if (quest != null && !quest.IsQuestCompleted)
                                 {
                                     manager.ShowStartDialogue(locId);
                                     quest.StartQuest(player, player.CurrentLocation);
-                                    
                                 }
                                 // Geen quest, alleen monster
                                 else if (monster != null && monster.IsAlive && (quest == null || quest.IsQuestStarted))
                                 {
+                                    player.CurrentHitPoints = player.MaximumHitPoints; // resets health dus je gaat terug naar 20
                                     bool playerWon = Combat.StartCombat(player, monster, player.CurrentWeapon);
 
                                     if (playerWon)
@@ -124,13 +140,20 @@ class Program
                                                 {
                                                     activeQuest.QuestCompleted();
                                                     manager.ShowCompleteDialogue(locId - 1);
-                                                    
+
+                                                    // nieuw wapen yayy
+                                                    if (monster.ID == World.MONSTER_ID_SNAKE)
+                                                    {
+                                                        Weapon club = World.WeaponByID(World.WEAPON_ID_CLUB);
+                                                        if (club != null && !player.Inventory.Weapons.Contains(club))
+                                                        {
+                                                            player.Inventory.AddWeapon(club);
+                                                            player.EquipWeapon(club);
+                                                        }
+                                                    }
                                                 }
                                             }
-                                            
-                                            
                                         }
-                                      
                                         player.CurrentLocation.MonsterLivingHere = null;
                                     }
                                 }
@@ -151,6 +174,17 @@ class Program
 
                         if (newLocation != null)
                         {
+                            // dit zou em moeten blokkeren als het werkt hahahahahahahahaahahahaha
+                            if ((newLocation == World.LocationByID(World.LOCATION_ID_GUARD_POST) ||
+                                 newLocation == World.LocationByID(World.LOCATION_ID_BRIDGE)) &&
+                                (!World.QuestByID(World.QUEST_ID_CLEAR_ALCHEMIST_GARDEN).IsQuestCompleted ||
+                                 !World.QuestByID(World.QUEST_ID_CLEAR_FARMERS_FIELD).IsQuestCompleted))
+                            {
+                                Console.WriteLine("The Guard glares at you, a silent warning to turn around.");
+                                Pause();
+                                newLocation = null;
+                            }
+
                             bool succes = player.TryMoveTo(newLocation);
                             if (!succes)
                             {
