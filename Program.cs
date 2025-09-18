@@ -4,6 +4,8 @@ using System.Formats.Asn1;
 using System.Collections.Generic;
 using System.Threading;
 using System.Formats.Tar;
+using Microsoft.VisualBasic;
+using System.Runtime.CompilerServices;
 
 class Program
 {
@@ -26,14 +28,14 @@ class Program
         };
 
         // geeft title een naam 
-        var menu = new Menu("Main Menu", options);
+        var menu = new Menu("=== Main Menu ===", options);
 
         bool running = true;
         while (running)
         {
             //  laat het menu zien 
             int choice = menu.Show();
-            // Console.Clear();
+            Console.Clear();
 
             switch (choice)
             {
@@ -54,238 +56,243 @@ class Program
 
                         Console.Clear();
                         Console.WriteLine("=== Current Location ===");
-                        Console.WriteLine($"You're at {player.CurrentLocation.Name}");
+                        Console.WriteLine($"\nYou're at {player.CurrentLocation.Name}");
                         Console.WriteLine(player.CurrentLocation.Description);
                         // toon de compas en de map voordat de gebruiker een keus kan maken
                         Console.WriteLine("\nYou are X: ");
                         player.CurrentLocation.ShowMap(player.CurrentLocation);
-                        Console.WriteLine(player.CurrentLocation.Compas());
+                        // Console.WriteLine(player.CurrentLocation.Compas());
                         Pause();
 
-                        // maak een lift aan met de opties die beschikbaar zijn om naar te navigeren 
-                        // dit is de lijst waar de nieuwe opties in komt
-                        List<string> moveOptions = new List<string>();
-                        // dit zijn de opties die in de lijst komt. 
-                        if (player.CurrentLocation.LocationToNorth != null) moveOptions.Add("North");
-                        if (player.CurrentLocation.LocationToEast != null) moveOptions.Add("East");
-                        if (player.CurrentLocation.LocationToSouth != null) moveOptions.Add("South");
-                        if (player.CurrentLocation.LocationToWest != null) moveOptions.Add("West");
+                        // fix de volgorde van de opties
+                        string action = PlayerActionMenu();
 
-
-                        //------->// DEBUGGGGGG 
-                        // Zorg dat de speler altijd een "niet bewegen" of "exit" optie heeft.
-                        // Zo wordt menu nooit leeg en komt er altijd een keuzescherm.
-                        moveOptions.Add("Stay here");
-                        moveOptions.Add("Exit to the main menu");
-                        // dan skipt hij alle dialoog naar hier
-                        // menu tonen 
-                        var moveMenu = new Menu("Where do you want to go?", moveOptions);
-                        int moveChoice = moveMenu.Show();
-
-                        Location newLocation = null;
-                        switch (moveOptions[moveChoice])
+                        if (action == "Keep moving")
                         {
-                            case "North":
-                                newLocation = player.CurrentLocation.LocationToNorth;
-                                break;
-                            case "East":
-                                newLocation = player.CurrentLocation.LocationToEast;
-                                break;
-                            case "South":
-                                newLocation = player.CurrentLocation.LocationToSouth;
-                                break;
-                            case "West":
-                                newLocation = player.CurrentLocation.LocationToWest;
-                                break;
-                            case "Stay here":
-                                var quest = player.CurrentLocation.QuestAvailableHere;
-                                var monster = player.CurrentLocation.MonsterLivingHere;
-                                int locId = player.CurrentLocation.ID;
+                            // maak een lift aan met de opties die beschikbaar zijn om naar te navigeren 
+                            // dit is de lijst waar de nieuwe opties in komt
+                            List<string> moveOptions = new List<string>();
+                            // dit zijn de opties die in de lijst komt. 
+                            if (player.CurrentLocation.LocationToNorth != null) moveOptions.Add("North");
+                            if (player.CurrentLocation.LocationToEast != null) moveOptions.Add("East");
+                            if (player.CurrentLocation.LocationToSouth != null) moveOptions.Add("South");
+                            if (player.CurrentLocation.LocationToWest != null) moveOptions.Add("West");
 
-                                // guard check
-                                if (player.CurrentLocation.ID == World.LOCATION_ID_GUARD_POST)
+                            // menu tonen 
+                            var moveMenu = new Menu("=== Where do you want to go? ===\n" + player.CurrentLocation.Compas(), moveOptions);
+                            int moveChoice = moveMenu.Show();
+
+                            Location newLocation = null;
+                            switch (moveOptions[moveChoice])
+                            {
+                                case "North":
+                                    newLocation = player.CurrentLocation.LocationToNorth;
+                                    break;
+                                case "East":
+                                    newLocation = player.CurrentLocation.LocationToEast;
+                                    break;
+                                case "South":
+                                    newLocation = player.CurrentLocation.LocationToSouth;
+                                    break;
+                                case "West":
+                                    newLocation = player.CurrentLocation.LocationToWest;
+                                    break;
+                            }
+
+                            if (newLocation != null)
+                            {
+                                bool succes = player.TryMoveTo(newLocation);
+                                if (!succes)
                                 {
-                                    bool alchemistDone = World.QuestByID(World.QUEST_ID_CLEAR_ALCHEMIST_GARDEN).IsQuestCompleted;
-                                    bool farmerDone = World.QuestByID(World.QUEST_ID_CLEAR_FARMERS_FIELD).IsQuestCompleted;
-
-                                    // geen guard quest als de andere twee nog niet af zijn
-                                    if (!(alchemistDone && farmerDone))
-                                    {
-                                        Console.WriteLine("The Guard eyes you warily, not fond of strangers.");
-                                        Pause();
-                                        break;
-                                    }
-
+                                    Console.WriteLine("You cannot go there!");
                                 }
-
-                                // Quest aanwezig en niet voltooid
-                                if (quest != null && !quest.IsQuestCompleted)
+                                else
                                 {
-                                    manager.ShowStartDialogue(locId);
-                                    quest.StartQuest(player, player.CurrentLocation);
+                                    Console.WriteLine($"You are now at {player.CurrentLocation.Name}");
+                                    Console.WriteLine("\nYou are X: ");
+                                    player.CurrentLocation.ShowMap(player.CurrentLocation);
+                                    Console.WriteLine(player.CurrentLocation.Compas());
                                 }
-                                // Geen quest, alleen monster
-                                else if (monster != null && monster.IsAlive && (quest == null || quest.IsQuestStarted))
-                                {
-                                    player.CurrentHitPoints = player.MaximumHitPoints; // resets health dus je gaat terug naar 20
-                                    bool playerWon = Combat.StartCombat(player, monster, player.CurrentWeapon);
+                                Pause();
+                            }
 
-                                    if (playerWon)
+                        }
+                        else if (action == "Stay here")
+                        {
+                            var quest = player.CurrentLocation.QuestAvailableHere;
+                            var monster = player.CurrentLocation.MonsterLivingHere;
+                            int locId = player.CurrentLocation.ID;
+
+                            // guard check
+                            if (player.CurrentLocation.ID == World.LOCATION_ID_GUARD_POST)
+                            {
+                                bool alchemistDone = World.QuestByID(World.QUEST_ID_CLEAR_ALCHEMIST_GARDEN).IsQuestCompleted;
+                                bool farmerDone = World.QuestByID(World.QUEST_ID_CLEAR_FARMERS_FIELD).IsQuestCompleted;
+                                // geen guard quest als de andere twee nog niet af zijn
+                                if (!(alchemistDone && farmerDone))
+                                {
+                                    Console.WriteLine("The Guard eyes you warily, not fond of strangers.");
+                                    Pause();
+                                    continue;
+                                }
+                            }
+
+                            // Quest aanwezig en niet voltooid
+                            if (quest != null && !quest.IsQuestCompleted)
+                            {
+                                manager.ShowStartDialogue(locId);
+                                quest.StartQuest(player, player.CurrentLocation);
+                            }
+                            // Geen quest, alleen monster
+                            else if (monster != null && monster.IsAlive && (quest == null || quest.IsQuestStarted))
+                            {
+                                player.CurrentHitPoints = player.MaximumHitPoints; // resets health dus je gaat terug naar 20
+                                bool playerWon = Combat.StartCombat(player, monster, player.CurrentWeapon);
+                                if (playerWon)
+                                {
+                                    if (monster != null)
                                     {
-                                        if (monster != null)
+                                        foreach (var activeQuest in player.ActiveQuests.ToList())
                                         {
-                                            foreach (var activeQuest in player.ActiveQuests.ToList())
+                                            if (!activeQuest.IsQuestCompleted)
                                             {
-                                                if (!activeQuest.IsQuestCompleted)
+                                                activeQuest.QuestCompleted();
+                                                manager.ShowCompleteDialogue(locId - 1);
+                                                // nieuw wapen yayy
+                                                if (monster.ID == World.MONSTER_ID_SNAKE)
                                                 {
-                                                    activeQuest.QuestCompleted();
-                                                    manager.ShowCompleteDialogue(locId - 1);
-
-                                                    // nieuw wapen yayy
-                                                    if (monster.ID == World.MONSTER_ID_SNAKE)
+                                                    Weapon club = World.WeaponByID(World.WEAPON_ID_CLUB);
+                                                    if (club != null && !player.Inventory.Weapons.Contains(club))
                                                     {
-                                                        Weapon club = World.WeaponByID(World.WEAPON_ID_CLUB);
-                                                        if (club != null && !player.Inventory.Weapons.Contains(club))
-                                                        {
-                                                            player.Inventory.AddWeapon(club);
-                                                            player.EquipWeapon(club);
-                                                        }
+                                                        player.Inventory.AddWeapon(club);
+                                                        player.EquipWeapon(club);
                                                     }
                                                 }
                                             }
                                         }
-                                        player.CurrentLocation.MonsterLivingHere = null;
                                     }
+                                    player.CurrentLocation.MonsterLivingHere = null;
                                 }
-                                else
-                                {
-                                    Console.WriteLine("Nothing to do here...");
-                                }
-
-                                Pause();
-                                break;
-
-                                
-                                
-                            case "Exit to the main menu":
-                                keepExploring = false;
-                                break;
-                        }
-
-                        if (newLocation != null)
-                        {
-                            // dit zou em moeten blokkeren als het werkt hahahahahahahahaahahahaha
-                            if ((newLocation == World.LocationByID(World.LOCATION_ID_GUARD_POST) ||
-                                 newLocation == World.LocationByID(World.LOCATION_ID_BRIDGE)) &&
-                                (!World.QuestByID(World.QUEST_ID_CLEAR_ALCHEMIST_GARDEN).IsQuestCompleted ||
-                                 !World.QuestByID(World.QUEST_ID_CLEAR_FARMERS_FIELD).IsQuestCompleted))
-                            {
-                                Console.WriteLine("The Guard glares at you, a silent warning to turn around.");
-                                Pause();
-                                newLocation = null;
-                            }
-
-                            bool succes = player.TryMoveTo(newLocation);
-                            if (!succes)
-                            {
-                                Console.WriteLine("You cannot go there!");
                             }
                             else
                             {
-                                Console.WriteLine($"You are now at {player.CurrentLocation.Name}");
-                                Console.WriteLine("\nYou are X: ");
-                                player.CurrentLocation.ShowMap(player.CurrentLocation);
-                                Console.WriteLine(player.CurrentLocation.Compas());
+                                Console.WriteLine("Nothing to do here...");
                             }
                             Pause();
                         }
-                    }
-                    while (keepExploring);
+                        else if (action == "Open inventory")
+                        {
+                            player.Inventory.ShowInventory();
+                            Pause();
+                        }
+                    } while (keepExploring);
                     break;
 
                 case 1:
-                    Console.WriteLine("We are the Dev group KAAS!");
-                    Pause();
-                    break;
+                            Console.WriteLine("We are the Dev group KAAS!");
+                            Pause();
+                            break;
 
-                case 2:
-                    Console.WriteLine("Goodbye!");
-                    running = false;
-                    break;
-                case 3: // test inventory
-                        // TestInventory();]
-                    Console.Clear();
-                    Console.WriteLine("Please work.");
-                    
-                    // Pause();
-                    // break;
-                // case 4: // test dialogue
-                    
+                        case 2:
+                            Console.WriteLine("Goodbye!");
+                            running = false;
+                            break;
+                        case 3: // test inventory
+                                // TestInventory();]
+                            Console.Clear();
+                            Console.WriteLine("Please work.");
 
-                    // if player no exist it still do it fuck you
-                    if (player == null)
-                    {
-                        player = new Player(World.LocationByID(World.LOCATION_ID_ALCHEMIST_HUT));
+                            // Pause();
+                            // break;
+                            // case 4: // test dialogue
+
+
+                            // if player no exist it still do it fuck you
+                            if (player == null)
+                            {
+                                player = new Player(World.LocationByID(World.LOCATION_ID_ALCHEMIST_HUT));
+                            }
+                            player.CurrentLocation = World.LocationByID(World.LOCATION_ID_ALCHEMIST_HUT);
+
+                            manager.ShowStartDialogue(player.CurrentLocation.ID);
+                            manager.ShowCompleteDialogue(player.CurrentLocation.ID);
+
+                            Pause();
+                            break;
+
+                        }
+
+                        // optie om te lopen
                     }
-                    player.CurrentLocation = World.LocationByID(World.LOCATION_ID_ALCHEMIST_HUT);
+    }
 
-                    manager.ShowStartDialogue(player.CurrentLocation.ID);
-                    manager.ShowCompleteDialogue(player.CurrentLocation.ID);
 
-                    Pause();
-                    break;
+            // test methode om te kijken als de inventory werkt
+            // static void TestInventory()
+            // {
+            //     Console.WriteLine("TESTING inventory");
+
+
+            //     Inventory inv = new Inventory();
+
+            //     inv.AddWeapon(World.WeaponByID(World.WEAPON_ID_RUSTY_SWORD));
+            //     inv.AddWeapon(World.WeaponByID(World.WEAPON_ID_CLUB));
+
+            //     inv.ShowInventory();
+            // }
+
+            //=================== TEST 2 =======================
+            // static void TestInventory()
+            // {
+            //     Player player = new Player("Wizard", 20);
+
+            //     // Voeg wapens toe aan zijn inventory
+            //     player.Inventory.AddWeapon(World.WeaponByID(World.WEAPON_ID_RUSTY_SWORD));
+            //     player.Inventory.AddWeapon(World.WeaponByID(World.WEAPON_ID_CLUB));
+
+            //     // Toon inventory
+            //     player.Inventory.ShowInventory();
+
+            //     // Maak een menu van de inventory namen
+            //     var options = new List<string>();
+            //     foreach (var weapon in player.Inventory.Weapons)
+            //     {
+            //         options.Add(weapon.Name);
+            //     }
+
+            //     var menu = new Menu("Select a weapon to equip:", options);
+            //     int choice = menu.Show();
+
+            //     // Equip dat wapen
+            //     Weapon selected = player.Inventory.Weapons[choice];
+            //     player.EquipWeapon(selected);
+            // }
+            // wacht op een key zodat gebuirker output kan lezen 
+            // static void Pause()
+            // {
+            //     Console.WriteLine("\nPress any key...");
+            //     Console.ReadKey(true);
+            // }
+
+            static string PlayerActionMenu()
+            {
+                var actions = new List<string>
+        {
+            "Stay here",
+            "Keep moving",
+            "Open inventory"
+        };
+
+                var menu = new Menu("==== What do you want to do? ===", actions);
+                int choice = menu.Show();
+
+                return actions[choice];
 
             }
-            
-            // optie om te lopen
-        }
-    }
-
-
-    // test methode om te kijken als de inventory werkt
-    // static void TestInventory()
-    // {
-    //     Console.WriteLine("TESTING inventory");
-
-
-    //     Inventory inv = new Inventory();
-
-    //     inv.AddWeapon(World.WeaponByID(World.WEAPON_ID_RUSTY_SWORD));
-    //     inv.AddWeapon(World.WeaponByID(World.WEAPON_ID_CLUB));
-
-    //     inv.ShowInventory();
-    // }
-
-    //=================== TEST 2 =======================
-    // static void TestInventory()
-    // {
-    //     Player player = new Player("Wizard", 20);
-
-    //     // Voeg wapens toe aan zijn inventory
-    //     player.Inventory.AddWeapon(World.WeaponByID(World.WEAPON_ID_RUSTY_SWORD));
-    //     player.Inventory.AddWeapon(World.WeaponByID(World.WEAPON_ID_CLUB));
-
-    //     // Toon inventory
-    //     player.Inventory.ShowInventory();
-
-    //     // Maak een menu van de inventory namen
-    //     var options = new List<string>();
-    //     foreach (var weapon in player.Inventory.Weapons)
-    //     {
-    //         options.Add(weapon.Name);
-    //     }
-
-    //     var menu = new Menu("Select a weapon to equip:", options);
-    //     int choice = menu.Show();
-
-    //     // Equip dat wapen
-    //     Weapon selected = player.Inventory.Weapons[choice];
-    //     player.EquipWeapon(selected);
-    // }
-    // wacht op een key zodat gebuirker output kan lezen 
-    static void Pause()
-    {
-        Console.WriteLine("\nPress any key...");
-        Console.ReadKey(true);
-    }
+                // Simple pause for when you just want to wait
+            static void Pause()
+            {
+                Console.WriteLine("\n\nPress any key...");
+                Console.ReadKey(true);
+            }
 }

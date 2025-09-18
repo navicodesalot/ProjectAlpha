@@ -67,7 +67,7 @@ public class Menu
         // maak het scherm leeg
         Console.Clear();
         // schrijf de title van het menu op
-        Console.WriteLine($"=== {_title} ===\n");
+        Console.WriteLine($"{_title}\n");
 
         // print alle opties maar geef de gesleecteerde optie een andere kleur
         for (int i = 0; i < _options.Count; i++)
